@@ -1,7 +1,8 @@
 {
   "require": {
     "smarty/smarty": "^4.3",
-    "scssphp/scssphp": "^1.11"
+    "scssphp/scssphp": "^1.11",
+    "fakerphp/faker": "^1.24"
   },
   "autoload": {
     "psr-4": {
