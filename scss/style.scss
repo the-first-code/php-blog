@@ -1,6 +1,11 @@
+// Переменные
 $primary-color: #007bff;
 $bg-light: #f8f9fa;
 $text-dark: #333;
+$text-muted: #666;
+$text-light: #999;
+$border-color: #ddd;
+$white: #fff;
 
 body {
   font-family: Arial, sans-serif;
@@ -10,37 +15,82 @@ body {
   padding: 20px;
 }
 
+// Шапка сайта
+.main-header {
+  background: #333;
+  padding: 15px 0;
+  margin-bottom: 30px;
+
+  .header-container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 0 20px;
+  }
+
+  .logo {
+    color: $white;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+  }
+}
+
+// Главный контейнер страниц
 .container {
   max-width: 1000px;
   margin: auto;
-  background: #fff;
+  background: $white;
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
+// Секция категории на главной
 .category-section {
   margin-bottom: 40px;
-  h2 { border-bottom: 2px solid $primary-color; padding-bottom: 5px; }
+
+  h2 {
+    border-bottom: 2px solid $primary-color;
+    padding-bottom: 5px;
+  }
+
+  .category-desc {
+    color: $text-muted;
+    font-style: italic;
+  }
+
+  .category-btn {
+    margin-top: 15px;
+  }
 }
 
+// Флекс-сетка для статей
 .articles-grid {
   display: flex;
   flex-wrap: wrap;
   margin: -10px;
 }
 
+// Карточка статьи
 .article-card {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   padding: 15px;
   margin: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid $border-color;
   border-radius: 5px;
-  background: #fff;
+  background: $white;
   flex: 1 1 calc(33.333% - 20px);
   min-width: 280px;
+
+  // Эффект плавного подъема карточки и появления тени
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
 
   img {
     max-width: 100%;
@@ -51,28 +101,166 @@ body {
 
   h3, h4 {
     margin: 15px 0 10px 0;
+
+    a {
+      color: $text-dark;
+      text-decoration: none;
+      // Плавная смена цвета ссылки при наведении
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $primary-color;
+      }
+    }
   }
 
   p {
     flex-grow: 1;
     margin-bottom: 15px;
   }
+
+  .card-meta {
+    color: $text-light;
+    font-size: 0.85em;
+  }
 }
 
+// Одиночная страница статьи
+.full-article {
+  margin-bottom: 50px;
+
+  .article-header {
+    margin-bottom: 20px;
+  }
+
+  .article-meta {
+    color: #888;
+    margin-bottom: 15px;
+  }
+
+  .article-cover {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .article-body {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: $text-dark;
+  }
+}
+
+// Блок сортировки на странице категории
+.sort-panel {
+  background: #f0f4f8;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 25px;
+
+  a {
+    margin-left: 10px;
+    color: $primary-color;
+    text-decoration: none;
+    // Плавное переключение состояний сортировки
+    transition: color 0.2s ease, font-weight 0.2s ease;
+
+    &.active {
+      font-weight: bold;
+      color: $text-dark;
+    }
+
+    &:hover:not(.active) {
+      color: darken($primary-color, 15%);
+    }
+  }
+}
+
+// Ссылки навигации (Назад на главную)
+.back-link {
+  text-decoration: none;
+  color: $primary-color;
+  display: inline-block;
+  margin-bottom: 15px;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: darken($primary-color, 15%);
+  }
+}
+
+// Блок похожих статей
+.similar-section {
+  background: #f9f9f9;
+  padding: 25px;
+  border-radius: 6px;
+  border-top: 4px solid $primary-color;
+
+  .similar-card {
+    background: $white;
+
+    p {
+      font-size: 0.9em;
+      color: $text-muted;
+    }
+  }
+}
+
+// Кнопки
 .btn {
   display: inline-block;
   padding: 8px 15px;
   background: $primary-color;
-  color: #fff;
+  color: $white;
   text-decoration: none;
   border-radius: 4px;
   margin-top: 10px;
   align-self: flex-start;
-  &:hover { background: darken($primary-color, 10%); }
+  border: none;
+  cursor: pointer;
+  // Плавное потемнение кнопки при наведении
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: darken($primary-color, 10%);
+  }
 }
 
+// Пагинация
 .pagination {
-  margin-top: 20px;
+  margin-top: 30px;
   display: flex;
   gap: 5px;
+
+  .page-link {
+    padding: 8px 14px;
+    text-decoration: none;
+    border: 1px solid $primary-color;
+    border-radius: 4px;
+    font-weight: bold;
+    background: $white;
+    color: $primary-color;
+    // Плавный отклик кнопок страниц
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &.active {
+      background: $primary-color;
+      color: $white;
+    }
+
+    &:hover:not(.active) {
+      background: rgba($primary-color, 0.1);
+    }
+  }
+}
+
+// Подвал сайта
+.main-footer {
+  margin-top: 50px;
+  text-align: center;
+  color: #888;
+  padding: 20px 0;
+  border-top: 1px solid $border-color;
 }
