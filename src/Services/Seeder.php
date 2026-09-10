@@ -8,7 +8,6 @@ use PDO;
 class Seeder {
     public static function run(): void {
         $db = Database::getConnection();
-
         $faker = Factory::create('ru_RU');
 
         // Очищаем старые данные
@@ -17,6 +16,11 @@ class Seeder {
         $db->exec("TRUNCATE TABLE articles;");
         $db->exec("TRUNCATE TABLE categories;");
         $db->exec("SET FOREIGN_KEY_CHECKS = 1;");
+
+        $uploadDir = __DIR__ . '/../../public/images/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
 
         $categoryNames = ['Технологии', 'Путешествия', 'Дизайн', 'Программирование', 'Лайфстайл'];
         $categoryIds = [];
@@ -30,33 +34,41 @@ class Seeder {
             $categoryIds[] = $db->lastInsertId();
         }
 
+        $keywords = ['technology', 'travel', 'design', 'coding', 'lifestyle'];
+
         for ($i = 1; $i <= 30; $i++) {
             $title = rtrim($faker->realText(40), '.');
-
             $description = $faker->realText(120);
 
-            // Настоящий большой текст статьи из нескольких абзацев
             $paragraphs = [];
             for ($j = 0; $j < 4; $j++) {
                 $paragraphs[] = $faker->realText(400);
             }
             $text = implode("\n\n", $paragraphs);
 
+            $imageName = "default.jpg";
+            $imagePath = $uploadDir . $imageName;
+
+            $randomTag = $keywords[array_rand($keywords)];
+            // Используем LoremFlickr для генерации картинок нужного размера (например, 800x600)
+            $imageUrl = "https://loremflickr.com/800/600/" . $randomTag;
+
+            $imageContent = @file_get_contents($imageUrl);
+            file_put_contents($imagePath, $imageContent);
+
             $stmt = $db->prepare("INSERT INTO articles (image, title, description, text, views) VALUES (?, ?, ?, ?, ?)");
             $stmt->execute([
-                "default.jpg",
+                $imageName,
                 $title,
                 $description,
                 $text,
                 rand(0, 1500)
             ]);
-
             $articleId = $db->lastInsertId();
 
             // Привязываем статью к одной или нескольким случайным категориям
             $shuffledCategories = $categoryIds;
             shuffle($shuffledCategories);
-
             $categoriesCount = rand(1, 2);
             for ($c = 0; $c < $categoriesCount; $c++) {
                 $db->prepare("INSERT INTO article_category (article_id, category_id) VALUES (?, ?)")
@@ -64,6 +76,6 @@ class Seeder {
             }
         }
 
-        echo "Faker Seeding completed successfully! Generated 5 categories and 30 articles.\n";
+        echo "Faker Seeding completed successfully! Generated 5 categories and 30 articles with images.\n";
     }
 }
